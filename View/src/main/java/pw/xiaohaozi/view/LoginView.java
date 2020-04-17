@@ -1,4 +1,4 @@
-package pw.xiaohaozi.view.loginview;
+package pw.xiaohaozi.view;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;

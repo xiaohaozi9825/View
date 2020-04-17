@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="32dp">
 
-        <pw.xiaohaozi.view.autoscrollview.AutoScrollView
+        <pw.xiaohaozi.view.AutoScrollView
             android:id="@+id/asv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,10 +46,10 @@
             </LinearLayout>
 
 
-        </pw.xiaohaozi.view.autoscrollview.AutoScrollView>
+        </pw.xiaohaozi.view.AutoScrollView>
     </androidx.cardview.widget.CardView>
 
-    <pw.xiaohaozi.view.loginview.LoginView
+    <pw.xiaohaozi.view.LoginView
         android:id="@+id/login_view"
         android:layout_width="120dp"
         android:gravity="center"
@@ -61,4 +61,5 @@
         android:textSize="18sp"
         android:padding="16dp"
         android:text="登录" />
+
 </LinearLayout>

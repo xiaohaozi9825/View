@@ -1,4 +1,4 @@
-package pw.xiaohaozi.view.autoscrollview;
+package pw.xiaohaozi.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

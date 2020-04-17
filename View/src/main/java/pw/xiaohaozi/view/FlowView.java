@@ -1,4 +1,4 @@
-package pw.xiaohaozi.view.flowview;
+package pw.xiaohaozi.view;
 
 import android.content.Context;
 import android.graphics.Rect;

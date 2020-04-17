@@ -1,8 +1,8 @@
 package com.ec.myview;
 
 import androidx.appcompat.app.AppCompatActivity;
-import pw.xiaohaozi.view.autoscrollview.AutoScrollView;
-import pw.xiaohaozi.view.loginview.LoginView;
+import pw.xiaohaozi.view.AutoScrollView;
+import pw.xiaohaozi.view.LoginView;
 
 import android.os.Bundle;
 import android.view.View;
