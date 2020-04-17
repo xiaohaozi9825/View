@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--declare-styleable的name值好像没有明确规定，但一般使用自定义view的类名-->
+    <declare-styleable name="AutoScrollView">
+        <!-- 滚动速度。 slow：低速 ；horotelic_rate：中速 ；fast：快速 ；默认：horotelic_rate ；也可以是整数类型。 -->
+        <attr name="autoScrollVelocity" format="integer">
+            <enum name="slow" value="100" />
+            <enum name="horotelic_rate" value="200" />
+            <enum name="fast" value="300" />
+        </attr>
+        <!--滚动属性。exceed：超出滚动 ； always：永远滚动 ；默认：exceed-->
+        <attr name="autoScrollAttribute">
+            <!--value值只能是int类型的  所以获取时通过typeArray.getInt获取-->
+            <enum name="exceed" value="1" />
+            <enum name="always" value="2" />
+        </attr>
+        <!--滚动方向。horizontal：水平滚动 ；vertical：垂直滚动 ； 默认：horizontal-->
+        <attr name="autoScrollDirection">
+            <enum name="horizontal" value="1" />
+            <enum name="vertical" value="2" />
+        </attr>
+
+    </declare-styleable>
+    <declare-styleable name="LoginView">
+        <!--        边框颜色-->
+        <attr name="loginBorderColor" format="color" />
+        <!--        边框宽度-->
+        <attr name="loginBorderWidth" format="dimension" />
+
+        <!--        填充色-->
+        <attr name="loginContentColor" format="color" />
+
+    </declare-styleable>
+</resources>
