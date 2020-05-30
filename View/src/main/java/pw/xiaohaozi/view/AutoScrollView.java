@@ -2,6 +2,7 @@ package pw.xiaohaozi.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Size;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import pw.xiaohaozi.view.R;
 
 /**
@@ -25,6 +27,7 @@ import pw.xiaohaozi.view.R;
  * 使用注意事项：
  * 1、如果想要子视图尺寸发生变化，则重新滚动，则需要将子控件的宽高设置成包裹内容
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class AutoScrollView extends FrameLayout {
     /**
      * 慢速滚动
