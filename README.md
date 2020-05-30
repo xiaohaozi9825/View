@@ -5,7 +5,7 @@
 2、可以设置滚动速度。</br>
 3、可以设置滚动属性，永久滚动，内容超出范围才滚动。</br>
 ### 3、BubbleView 气泡控件 ###
-
+![BubbleView效果图](https://github.com/xiaohaozi9825/View/blob/master/%E6%95%88%E6%9E%9C%E5%9B%BE/BubbleView.jpg)</br>
 1、可以设置气泡颜色；</br>
 2、可以设置气泡Z轴方向高度；</br>
 3、可以设置气泡阴影颜色；</br>
