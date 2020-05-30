@@ -36,6 +36,7 @@ import java.util.Map;
  * flowLayout.addView(tv, layoutParams);
  * }
  */
+@Deprecated
 public class FlowView extends FrameLayout {
     private static final String TAG = "FlowLayout";
 
