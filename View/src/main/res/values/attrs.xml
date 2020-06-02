@@ -53,6 +53,8 @@
         <attr name="bubbleElevation" format="dimension" />
         <!--        阴影颜色-->
         <attr name="bubbleShadowColor" format="color" />
+
+
         <!--        指示器位置
         以指示器向左为例：
         start：指示器在上方，会留出圆角位置
@@ -66,5 +68,11 @@
             <enum name="centre" value="1" />
             <enum name="end" value="2" />
         </attr>
+
+        //2020-6-2 09:19:15 新增
+        <attr name="bubbleMaxWidth" format="dimension" />
+        <attr name="bubbleMaxHeight" format="dimension" />
+        <attr name="bubbleMinWidth" format="dimension" />
+        <attr name="bubbleMinHeight" format="dimension" />
     </declare-styleable>
 </resources>

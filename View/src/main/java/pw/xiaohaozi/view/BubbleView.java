@@ -41,6 +41,12 @@ public class BubbleView extends ViewGroup {
     private boolean isFillIndicator = false;//子控件是否填充到指示器上
     private DrawIndicator mDrawIndicator = new DrawTrilateralIndicator();
 
+    //2020-6-2 09:17:44 新增
+    private int mMaxWhidt;
+    private int mMaxHeight;
+    private int mMinWhidt;
+    private int mMinHeight;
+
     private int mBubbleIndicatorLocationType;//位置属性类别
     private float location_f;//浮点型
     private float location_d;//尺寸值
@@ -135,10 +141,20 @@ public class BubbleView extends ViewGroup {
                 break;
         }
 
+        //2020-6-2 09:21:13 新增
+        //注意：
+        // 1、最大值不能比最小值小
+        // 2、最大值最小值只有在高度或宽度不确定的时候有效，如果宽高确定，则最大值最小值无效
+        mMaxWhidt = (int) typedArray.getDimension(R.styleable.BubbleView_bubbleMaxWidth, -1);
+        mMaxHeight = (int) typedArray.getDimension(R.styleable.BubbleView_bubbleMaxHeight, -1);
+        mMinWhidt = (int) typedArray.getDimension(R.styleable.BubbleView_bubbleMinWidth, -1);
+        mMinHeight = (int) typedArray.getDimension(R.styleable.BubbleView_bubbleMinHeight, -1);
+
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
 
         //①获取控件的宽高模式和宽高值
         // MeasureSpec.AT_MOST; 至多模式, 控件有多大显示多大, wrap_content
@@ -148,10 +164,30 @@ public class BubbleView extends ViewGroup {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);//获取高模式
         int width = MeasureSpec.getSize(widthMeasureSpec);//获取宽度值
         int height = MeasureSpec.getSize(heightMeasureSpec);//获取高度值
+//        if (mMaxWhidt > 0 && widthMode != MeasureSpec.EXACTLY) width = Math.min(mMaxWhidt, width);
+//        if (mMaxHeight > 0 && heightMode != MeasureSpec.EXACTLY) height = Math.min(mMaxHeight, height);
+        if (mMaxWhidt > 0) {
+            if (mMaxWhidt < mMinWhidt)
+                throw new IllegalStateException("W(￣_￣)W   最大宽度不能比最小宽度小");
+            if (widthMode == MeasureSpec.UNSPECIFIED)
+                width = mMaxWhidt;
+            else if (widthMode == MeasureSpec.AT_MOST)
+                width = Math.min(width, mMaxWhidt);
+            widthMode = MeasureSpec.EXACTLY;
+        }
+        if (mMaxHeight > 0) {
+            if (mMaxHeight < mMinHeight)
+                throw new IllegalStateException("W(￣_￣)W   最大高度不能比最小高度小");
+            if (heightMode == MeasureSpec.UNSPECIFIED)
+                height = mMaxHeight;
+            else if (heightMode == MeasureSpec.AT_MOST)
+                height = Math.min(height, mMaxHeight);
+            heightMode = MeasureSpec.EXACTLY;
+        }
         Log.i(TAG, "onMeasure: width = " + width + "  height = " + height);
         Log.i(TAG, "onMeasure: widthMode = " + toMode(widthMode) + "  heightMode = " + toMode(heightMode));
-        int childWidth = width;
-        int childHeight = height;
+        int childWidth = (int) (width - 1.5 * mElevation);
+        int childHeight = (int) (height - 1.5 * mElevation);
 //        // ②根据获取到的宽高模式和宽高值重新生成新的数据
         if (!isFillIndicator) {
             switch (mIndicatorDirection) {
@@ -166,8 +202,6 @@ public class BubbleView extends ViewGroup {
                 default:
                     break;
             }
-
-
         }
 //        // ③根据最新的高度来重新生成heightMeasureSpec(高度模式是确定模式)
         int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidth, widthMode);
@@ -182,6 +216,7 @@ public class BubbleView extends ViewGroup {
             if ((mIndicatorDirection == IndicatorDirection.LEFT || mIndicatorDirection == IndicatorDirection.RIGHT) && !isFillIndicator)
                 width = (int) (cw + getPaddingLeft() + getPaddingRight() + mIndicatorHeight + 1.5 * mElevation);
             else width = (int) (cw + getPaddingLeft() + getPaddingRight() + 1.5 * mElevation);
+            width = Math.max(width, mMinWhidt);
             if (widthMode == MeasureSpec.UNSPECIFIED) widthMode = MeasureSpec.AT_MOST;
         }
         if (heightMode != MeasureSpec.EXACTLY) {
@@ -193,6 +228,7 @@ public class BubbleView extends ViewGroup {
             if ((mIndicatorDirection == TOP || mIndicatorDirection == BOTTOM) && !isFillIndicator)
                 height = (int) (ch + getPaddingTop() + getPaddingBottom() + mIndicatorHeight + 1.5 * mElevation);
             else height = (int) (ch + getPaddingTop() + getPaddingBottom() + 1.5 * mElevation);
+            height = Math.max(height, mMinHeight);
             if (heightMode == MeasureSpec.UNSPECIFIED) heightMode = MeasureSpec.AT_MOST;
         }
         widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, widthMode);
@@ -582,6 +618,26 @@ public class BubbleView extends ViewGroup {
         requestLayout();
     }
 
+    public void setMaxWhidt(int maxWhidt) {
+        mMaxWhidt = maxWhidt;
+        requestLayout();
+    }
+
+    public void setMaxHeight(int maxHeight) {
+        mMaxHeight = maxHeight;
+        requestLayout();
+    }
+
+    public void setMinWhidt(int minWhidt) {
+        mMinWhidt = minWhidt;
+        requestLayout();
+    }
+
+    public void setMinHeight(int minHeight) {
+        mMinHeight = minHeight;
+        requestLayout();
+    }
+    /****************辅助类*******************/
     /**
      * 指示器方向
      */
