@@ -3,6 +3,7 @@ package pw.xiaohaozi.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -81,7 +82,8 @@ public class BubbleView extends ViewGroup {
         getTypedArray(context, attrs);
         mPath = new Path();
         mIndicatorPath = new Path();
-        mPaint = new Paint();
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);//抗锯齿
+        mPaint.setStrokeCap(Paint.Cap.ROUND);//线条是圆角的
         if (mStrokeWidth > 0) {
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(mStrokeWidth);
@@ -200,8 +202,8 @@ public class BubbleView extends ViewGroup {
         }
 //        Log.i(TAG, "onMeasure: width = " + width + "  height = " + height);
 //        Log.i(TAG, "onMeasure: widthMode = " + toMode(widthMode) + "  heightMode = " + toMode(heightMode));
-        int childWidth = (int) (width - 1.5 * mElevation);
-        int childHeight = (int) (height - 1.5 * mElevation);
+        int childWidth = (int) (width - mElevation);
+        int childHeight = (int) (height - mElevation);
 //        // ②根据获取到的宽高模式和宽高值重新生成新的数据
         if (!isFillIndicator) {
             switch (mIndicatorDirection) {
@@ -228,8 +230,8 @@ public class BubbleView extends ViewGroup {
                 cw = Math.max(childAt.getMeasuredWidth(), cw);
             }
             if ((mIndicatorDirection == IndicatorDirection.LEFT || mIndicatorDirection == IndicatorDirection.RIGHT) && !isFillIndicator)
-                width = (int) (cw + getPaddingLeft() + getPaddingRight() + mIndicatorHeight + 1.5 * mElevation);
-            else width = (int) (cw + getPaddingLeft() + getPaddingRight() + 1.5 * mElevation);
+                width = (int) (cw + getPaddingLeft() + getPaddingRight() + mIndicatorHeight + mElevation);
+            else width = (int) (cw + getPaddingLeft() + getPaddingRight() + mElevation);
             width = Math.max(width, mMinWhidt);
             if (widthMode == MeasureSpec.UNSPECIFIED) widthMode = MeasureSpec.AT_MOST;
         }
@@ -240,8 +242,8 @@ public class BubbleView extends ViewGroup {
                 ch = Math.max(childAt.getMeasuredHeight(), ch);
             }
             if ((mIndicatorDirection == TOP || mIndicatorDirection == BOTTOM) && !isFillIndicator)
-                height = (int) (ch + getPaddingTop() + getPaddingBottom() + mIndicatorHeight + 1.5 * mElevation);
-            else height = (int) (ch + getPaddingTop() + getPaddingBottom() + 1.5 * mElevation);
+                height = (int) (ch + getPaddingTop() + getPaddingBottom() + mIndicatorHeight + mElevation);
+            else height = (int) (ch + getPaddingTop() + getPaddingBottom() + mElevation);
             height = Math.max(height, mMinHeight);
             if (heightMode == MeasureSpec.UNSPECIFIED) heightMode = MeasureSpec.AT_MOST;
         }
@@ -288,20 +290,20 @@ public class BubbleView extends ViewGroup {
         if (!isFillIndicator) {
             switch (mIndicatorDirection) {
                 case LEFT:
-                    layout_(mIndicatorHeight + mElevation / 2, mElevation / 2,
-                            right - mElevation, bottom - mElevation);
+                    layout_(mIndicatorHeight + mElevation / 2, (int) (mElevation * .2f + .5f),
+                            right - mElevation / 2, bottom - (int) (mElevation * .8f + .5f));
                     break;
                 case TOP:
-                    layout_(mElevation / 2, mIndicatorHeight + mElevation / 2,
-                            right - mElevation, bottom - mElevation);
+                    layout_(mElevation / 2, mIndicatorHeight + (int) (mElevation * .2f + .5f),
+                            right - mElevation / 2, bottom - (int) (mElevation * .8f + .5f));
                     break;
                 case RIGHT:
-                    layout_(mElevation / 2, mElevation / 2,
-                            right - mElevation - mIndicatorHeight, bottom - mElevation);
+                    layout_(mElevation / 2, (int) (mElevation * .2f + .5f),
+                            right - mElevation / 2 - mIndicatorHeight, bottom - (int) (mElevation * .8f + .5f));
                     break;
                 case BOTTOM:
-                    layout_(mElevation / 2, mElevation / 2,
-                            right - mElevation, bottom - mElevation - mIndicatorHeight);
+                    layout_(mElevation / 2, (int) (mElevation * .2f + .5f),
+                            right - mElevation / 2, bottom - (int) (mElevation * .8f + .5f) - mIndicatorHeight);
                     break;
                 default:
                     break;
@@ -309,8 +311,8 @@ public class BubbleView extends ViewGroup {
 
             return;
         }
-        layout_(mElevation / 2, mElevation / 2,
-                right - mElevation, bottom - mElevation);
+        layout_(mElevation / 2, (int) (mElevation * .2f + .5f),
+                right - mElevation / 2, bottom - (int) (mElevation * .8f + .5f));
     }
 
     /**
@@ -433,10 +435,10 @@ public class BubbleView extends ViewGroup {
 
     private void bubbleLeft() {
 
-        mPath.addRoundRect(mIndicatorHeight + mElevation / 2, mElevation / 2, w - mElevation,
-                h - mElevation, mRadius, mRadius, Path.Direction.CW);
+        mPath.addRoundRect(mIndicatorHeight + mElevation / 2, (int) (mElevation * .2f + .5f), w - mElevation / 2,
+                h - (int) (mElevation * .8f + .5f), mRadius, mRadius, Path.Direction.CW);
 
-        float computeMiddle = computeMiddle(h - 1.5 * mElevation, mElevation / 2);
+        float computeMiddle = computeMiddle(h - mElevation, mElevation / 2);
 
         mIndicatorRect.set(mElevation / 2, (int) (computeMiddle - mIndicatorWidth / 2)
                 , mIndicatorHeight + mElevation / 2, (int) (computeMiddle + mIndicatorWidth / 2));
@@ -449,13 +451,13 @@ public class BubbleView extends ViewGroup {
      */
     private void bubbleTop() {
 
-        mPath.addRoundRect(mElevation / 2, mIndicatorHeight + mElevation / 2, w - mElevation,
-                h - mElevation, mRadius, mRadius, Path.Direction.CW);
+        mPath.addRoundRect(mElevation / 2, mIndicatorHeight + (int) (mElevation * .2f + .5f), w - mElevation / 2,
+                h - (int) (mElevation * .8f + .5f), mRadius, mRadius, Path.Direction.CW);
 
-        float computeMiddle = computeMiddle(w - 1.5 * mElevation, mElevation / 2);
-        mIndicatorRect.set((int) (computeMiddle - mIndicatorWidth / 2), mElevation / 2,
+        float computeMiddle = computeMiddle(w - mElevation, mElevation / 2);
+        mIndicatorRect.set((int) (computeMiddle - mIndicatorWidth / 2), (int) (mElevation * .2f + .5f),
                 (int) (computeMiddle + mIndicatorWidth / 2),
-                mIndicatorHeight + mElevation / 2);
+                mIndicatorHeight + (int) (mElevation * .2f + .5f));
         mDrawIndicator.drawTop(mIndicatorPath, mIndicatorRect.left, mIndicatorRect.top, mIndicatorRect.right, mIndicatorRect.bottom);
     }
 
@@ -464,13 +466,13 @@ public class BubbleView extends ViewGroup {
      */
     private void bubbleRight() {
 
-        mPath.addRoundRect(mElevation / 2, mElevation / 2, w - mElevation - mIndicatorHeight,
-                h - mElevation, mRadius, mRadius, Path.Direction.CW);
+        mPath.addRoundRect(mElevation / 2, (int) (mElevation * .2f + .5f), w - mElevation / 2 - mIndicatorHeight,
+                h - (int) (mElevation * .8f + .5f), mRadius, mRadius, Path.Direction.CW);
 
-        float computeMiddle = computeMiddle(h - 1.5 * mElevation, mElevation / 2);
+        float computeMiddle = computeMiddle(h - mElevation, mElevation / 2);
 
-        mIndicatorRect.set(w - mElevation - mIndicatorHeight, (int) (computeMiddle - mIndicatorWidth / 2),
-                w - mElevation, (int) (computeMiddle + mIndicatorWidth / 2));
+        mIndicatorRect.set(w - mElevation / 2 - mIndicatorHeight, (int) (computeMiddle - mIndicatorWidth / 2),
+                w - mElevation / 2, (int) (computeMiddle + mIndicatorWidth / 2));
         mDrawIndicator.drawRight(mIndicatorPath, mIndicatorRect.left, mIndicatorRect.top, mIndicatorRect.right, mIndicatorRect.bottom);
     }
 
@@ -478,12 +480,12 @@ public class BubbleView extends ViewGroup {
      * 指示器在底部
      */
     private void bubbleBottom() {
-        mPath.addRoundRect(mElevation / 2, mElevation / 2, w - mElevation,
-                h - mElevation - mIndicatorHeight, mRadius, mRadius, Path.Direction.CW);
+        mPath.addRoundRect(mElevation / 2, (int) (mElevation * .2f + .5f), w - mElevation / 2,
+                h - (int) (mElevation * .8f + .5f) - mIndicatorHeight, mRadius, mRadius, Path.Direction.CW);
 
-        float computeMiddle = computeMiddle(w - 1.5 * mElevation, mElevation / 2);
-        mIndicatorRect.set((int) (computeMiddle - mIndicatorWidth / 2), h - mElevation - mIndicatorHeight,
-                (int) (computeMiddle + mIndicatorWidth / 2), h - mElevation);
+        float computeMiddle = computeMiddle(w - mElevation, (int) (mElevation / 2));
+        mIndicatorRect.set((int) (computeMiddle - mIndicatorWidth / 2), h - (int) (mElevation * .8f + .5f) - mIndicatorHeight,
+                (int) (computeMiddle + mIndicatorWidth / 2), h - (int) (mElevation * .8f + .5f));
         mDrawIndicator.drawBottom(mIndicatorPath, mIndicatorRect.left, mIndicatorRect.top, mIndicatorRect.right, mIndicatorRect.bottom);
 
     }
@@ -497,7 +499,7 @@ public class BubbleView extends ViewGroup {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        mPaint.setShadowLayer(mElevation / 2, mElevation / 8, mElevation / 4,
+        mPaint.setShadowLayer(mElevation / 2, 0, mElevation / 4,
                 mShadowColor & 0x00ffffff | 0x88000000);
         mPath.addPath(mIndicatorPath);
         if (mStrokeWidth > 0)

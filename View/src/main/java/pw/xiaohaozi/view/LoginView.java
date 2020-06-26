@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
@@ -197,6 +198,7 @@ public class LoginView extends TextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        Log.i("cao", "onTouchEvent: "+event.getAction());
         if (!isEnabled()) {
             return true;
         }
@@ -217,6 +219,10 @@ public class LoginView extends TextView {
                 shrink();
                 setEnabled(false);
                 performClick();
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                mState = STATE_DEFAULT;
+                invalidate();
                 break;
         }
         return super.onTouchEvent(event);

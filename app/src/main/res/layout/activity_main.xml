@@ -15,7 +15,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             app:cardCornerRadius="32dp">
 
             <pw.xiaohaozi.view.AutoScrollView
@@ -77,7 +77,6 @@
             app:bubbleElevation="8dp"
             app:bubbleFillIndicator="true"
             app:bubbleIndicatorDirection="left"
-            app:bubbleIndicatorHeight="8dp"
             app:bubbleIndicatorLocation="start"
 
             app:bubbleRadius="8dp"
@@ -97,6 +96,7 @@
             android:id="@+id/my_bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             app:bubbleElevation="8dp"
             app:bubbleFillIndicator="true"
             app:bubbleIndicatorDirection="left"
@@ -106,16 +106,10 @@
             app:bubbleShadowColor="#00ff00"
             app:bubbleStrokeWidth="1dp">
 
-
-            <!--        <ImageView-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="80dp"-->
-            <!--            android:background="@color/colorAccent"-->
-            <!--            android:src="@drawable/def_head" />-->
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:padding="8dp"
                 android:text="
         自定义指示器\n
@@ -127,7 +121,6 @@
         app:bubbleIndicatorDirection=&quot;left&quot;\n
         app:bubbleStrokeWidth=&quot;1dp&quot;\n
         app:bubbleIndicatorLocation=&quot;start&quot;" />
-
         </pw.xiaohaozi.view.BubbleView>
 
         <pw.xiaohaozi.view.BubbleView
@@ -144,6 +137,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
+
                 android:padding="8dp"
                 android:text="
         app:bubbleShadowColor=&quot;#00ffff&quot;\n
@@ -158,19 +153,41 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="8dp"
+            android:layout_margin="8dp"
             app:bubbleElevation="8dp"
-            app:bubbleIndicatorDirection="top">
+            app:bubbleIndicatorDirection="top"
+            app:bubbleShadowColor="#00ffff">
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
                 android:gravity="center"
                 android:text="
-        app:bubbleElevation=&quot;8dp&quot;\n
-        app:bubbleIndicatorDirection=&quot;top&quot;" />
+app:bubbleElevation=&quot;8dp&quot;\n
+app:bubbleIndicatorDirection=&quot;top&quot;" />
+
+        </pw.xiaohaozi.view.BubbleView>
+
+        <pw.xiaohaozi.view.BubbleView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            app:bubbleElevation="8dp"
+            app:bubbleIndicatorDirection="bottom"
+            app:bubbleShadowColor="#00ffff">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:gravity="left"
+                android:text="
+app:bubbleElevation=&quot;8dp&quot;\n
+app:bubbleIndicatorDirection=&quot;bottom&quot;" />
 
         </pw.xiaohaozi.view.BubbleView>
     </LinearLayout>
