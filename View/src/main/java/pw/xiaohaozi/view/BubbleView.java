@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -37,9 +38,12 @@ public class BubbleView extends ViewGroup {
     private int mIndicatorHeight = dp2px(8);//三角形指示器高度，默认8dp
     private int mIndicatorWidth = dp2px(8);//三角形指示器宽度，默认8dp
     private int mRadius = dp2px(8);//圆角角度
+    private int mStrokeWidth = 0;//线条宽度，当宽度>0，则显示线条，否则填充
     private IndicatorDirection mIndicatorDirection = BOTTOM;//箭头方向
     private boolean isFillIndicator = false;//子控件是否填充到指示器上
     private DrawIndicator mDrawIndicator = new DrawTrilateralIndicator();
+
+    private Rect mIndicatorRect = new Rect();
 
     //2020-6-2 09:17:44 新增
     private int mMaxWhidt;
@@ -53,6 +57,7 @@ public class BubbleView extends ViewGroup {
     private int location_e;//枚举值
 
     private Path mPath;
+    private Path mIndicatorPath;
     private Paint mPaint;
     private int w;
     private int h;
@@ -75,8 +80,14 @@ public class BubbleView extends ViewGroup {
         setBackgroundColor(0x00000000);
         getTypedArray(context, attrs);
         mPath = new Path();
+        mIndicatorPath = new Path();
         mPaint = new Paint();
-        mPaint.setStyle(Paint.Style.FILL);
+        if (mStrokeWidth > 0) {
+            mPaint.setStyle(Paint.Style.STROKE);
+            mPaint.setStrokeWidth(mStrokeWidth);
+        } else {
+            mPaint.setStyle(Paint.Style.FILL);
+        }
         mPaint.setColor(mBubbleColor);
         if (mElevation > 0)
             setLayerType(LAYER_TYPE_SOFTWARE, null);
@@ -150,6 +161,9 @@ public class BubbleView extends ViewGroup {
         mMinWhidt = (int) typedArray.getDimension(R.styleable.BubbleView_bubbleMinWidth, -1);
         mMinHeight = (int) typedArray.getDimension(R.styleable.BubbleView_bubbleMinHeight, -1);
 
+        //2020-6-24 17:21:21 新增，线条宽度
+        mStrokeWidth = (int) typedArray.getDimension(R.styleable.BubbleView_bubbleStrokeWidth, -1);
+
     }
 
     @Override
@@ -184,8 +198,8 @@ public class BubbleView extends ViewGroup {
                 height = Math.min(height, mMaxHeight);
             heightMode = MeasureSpec.EXACTLY;
         }
-        Log.i(TAG, "onMeasure: width = " + width + "  height = " + height);
-        Log.i(TAG, "onMeasure: widthMode = " + toMode(widthMode) + "  heightMode = " + toMode(heightMode));
+//        Log.i(TAG, "onMeasure: width = " + width + "  height = " + height);
+//        Log.i(TAG, "onMeasure: widthMode = " + toMode(widthMode) + "  heightMode = " + toMode(heightMode));
         int childWidth = (int) (width - 1.5 * mElevation);
         int childHeight = (int) (height - 1.5 * mElevation);
 //        // ②根据获取到的宽高模式和宽高值重新生成新的数据
@@ -237,6 +251,12 @@ public class BubbleView extends ViewGroup {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
+    /**
+     * 测试使用
+     *
+     * @param mode
+     * @return
+     */
     private String toMode(int mode) {
 //        Log.i("自定义控件", " MeasureSpec.EXACTLY = " + MeasureSpec.EXACTLY +
 //                "  MeasureSpec.AT_MOST = " + MeasureSpec.AT_MOST +
@@ -255,7 +275,7 @@ public class BubbleView extends ViewGroup {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        Log.i(TAG, "onSizeChanged: w = " + w + "  h = " + h);
+//        Log.i(TAG, "onSizeChanged: w = " + w + "  h = " + h);
         this.w = w;
         this.h = h;
         setPath();
@@ -375,6 +395,7 @@ public class BubbleView extends ViewGroup {
 
     /**
      * 三角形指示器
+     * 该指示器为默认指示器，在用户没有自定义指示器的情况，都是默认使用该指示器
      */
     private class DrawTrilateralIndicator implements DrawIndicator {
         @Override
@@ -416,21 +437,26 @@ public class BubbleView extends ViewGroup {
                 h - mElevation, mRadius, mRadius, Path.Direction.CW);
 
         float computeMiddle = computeMiddle(h - 1.5 * mElevation, mElevation / 2);
-        mDrawIndicator.drawLeft(mPath, mElevation / 2, (int) (computeMiddle - mIndicatorWidth / 2)
+
+        mIndicatorRect.set(mElevation / 2, (int) (computeMiddle - mIndicatorWidth / 2)
                 , mIndicatorHeight + mElevation / 2, (int) (computeMiddle + mIndicatorWidth / 2));
+        mDrawIndicator.drawLeft(mIndicatorPath, mIndicatorRect.left, mIndicatorRect.top, mIndicatorRect.right, mIndicatorRect.bottom);
+
     }
 
     /**
      * 指示器在上边
      */
     private void bubbleTop() {
+
         mPath.addRoundRect(mElevation / 2, mIndicatorHeight + mElevation / 2, w - mElevation,
                 h - mElevation, mRadius, mRadius, Path.Direction.CW);
 
         float computeMiddle = computeMiddle(w - 1.5 * mElevation, mElevation / 2);
-        mDrawIndicator.drawTop(mPath, (int) (computeMiddle - mIndicatorWidth / 2), mElevation / 2,
+        mIndicatorRect.set((int) (computeMiddle - mIndicatorWidth / 2), mElevation / 2,
                 (int) (computeMiddle + mIndicatorWidth / 2),
                 mIndicatorHeight + mElevation / 2);
+        mDrawIndicator.drawTop(mIndicatorPath, mIndicatorRect.left, mIndicatorRect.top, mIndicatorRect.right, mIndicatorRect.bottom);
     }
 
     /**
@@ -442,8 +468,10 @@ public class BubbleView extends ViewGroup {
                 h - mElevation, mRadius, mRadius, Path.Direction.CW);
 
         float computeMiddle = computeMiddle(h - 1.5 * mElevation, mElevation / 2);
-        mDrawIndicator.drawRight(mPath, w - mElevation - mIndicatorHeight, (int) (computeMiddle - mIndicatorWidth / 2),
+
+        mIndicatorRect.set(w - mElevation - mIndicatorHeight, (int) (computeMiddle - mIndicatorWidth / 2),
                 w - mElevation, (int) (computeMiddle + mIndicatorWidth / 2));
+        mDrawIndicator.drawRight(mIndicatorPath, mIndicatorRect.left, mIndicatorRect.top, mIndicatorRect.right, mIndicatorRect.bottom);
     }
 
     /**
@@ -454,8 +482,10 @@ public class BubbleView extends ViewGroup {
                 h - mElevation - mIndicatorHeight, mRadius, mRadius, Path.Direction.CW);
 
         float computeMiddle = computeMiddle(w - 1.5 * mElevation, mElevation / 2);
-        mDrawIndicator.drawBottom(mPath, (int) (computeMiddle - mIndicatorWidth / 2), h - mElevation - mIndicatorHeight,
+        mIndicatorRect.set((int) (computeMiddle - mIndicatorWidth / 2), h - mElevation - mIndicatorHeight,
                 (int) (computeMiddle + mIndicatorWidth / 2), h - mElevation);
+        mDrawIndicator.drawBottom(mIndicatorPath, mIndicatorRect.left, mIndicatorRect.top, mIndicatorRect.right, mIndicatorRect.bottom);
+
     }
 
 
@@ -469,28 +499,34 @@ public class BubbleView extends ViewGroup {
 
         mPaint.setShadowLayer(mElevation / 2, mElevation / 8, mElevation / 4,
                 mShadowColor & 0x00ffffff | 0x88000000);
+        mPath.addPath(mIndicatorPath);
+        if (mStrokeWidth > 0)
+            mPath.op(mIndicatorPath, Path.Op.UNION);
         canvas.drawPath(mPath, mPaint);
         canvas.clipPath(mPath);
     }
 
-/************************外界可以使用的方法*********************************/
+/************************公共方法*********************************/
     /**
      * 设置气泡颜色
+     * 对应属性 bubbleColor
      *
-     * @param backgroundColor
+     * @param bubbleColor
      */
-    public void setBubbleColor(int backgroundColor) {
-        mBubbleColor = backgroundColor;
+    public BubbleView setBubbleColor(int bubbleColor) {
+        mBubbleColor = bubbleColor;
         mPaint.setColor(mBubbleColor);
         requestLayout();
+        return this;
     }
 
     /**
      * 设置空间Z轴方向高度
+     * 对应属性 bubbleElevation
      *
      * @param elevation 单位：dp
      */
-    public void setElevation(int elevation) {
+    public BubbleView setElevation(int elevation) {
         if (elevation < 0) elevation = 0;
         mElevation = dp2px(elevation);
         if (mElevation > 0)
@@ -498,93 +534,109 @@ public class BubbleView extends ViewGroup {
         else setLayerType(LAYER_TYPE_NONE, null);
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 设置阴影颜色，elevation>0才会有效果
+     * 对应属性 bubbleShadowColor
      *
      * @param shadowColor
      */
-    public void setShadowColor(int shadowColor) {
+    public BubbleView setShadowColor(int shadowColor) {
         mShadowColor = shadowColor;
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 设置指示器高度，顶点到圆角矩形的距离
+     * 对应属性 bubbleIndicatorHeight
      *
      * @param indicatorHeight 单位：dp
      */
-    public void setIndicatorHeight(int indicatorHeight) {
+    public BubbleView setIndicatorHeight(int indicatorHeight) {
         mIndicatorHeight = dp2px(indicatorHeight);
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 设置指示器宽度，贴着圆角矩形的边长度
+     * 对应属性 bubbleIndicatorWidth
      *
      * @param indicatorWidth 单位：dp
      */
-    public void setIndicatorWidth(int indicatorWidth) {
+    public BubbleView setIndicatorWidth(int indicatorWidth) {
         mIndicatorWidth = dp2px(indicatorWidth);
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 设置圆角矩形的圆角半径
+     * 对应属性 bubbleRadius
      *
      * @param radius 单位：dp
      */
-    public void setRadius(int radius) {
+    public BubbleView setRadius(int radius) {
         mRadius = dp2px(radius);
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 设置指示器方向，可以是 左，上，右，下
+     * 对应属性 bubbleIndicatorDirection
      *
      * @param indicatorDirection
      */
-    public void setIndicatorDirection(IndicatorDirection indicatorDirection) {
+    public BubbleView setIndicatorDirection(IndicatorDirection indicatorDirection) {
         mIndicatorDirection = indicatorDirection;
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 子控件是否填充到指示器中
+     * 对应属性 bubbleFillIndicator
      *
      * @param fillIndicator
      */
-    public void setFillIndicator(boolean fillIndicator) {
+    public BubbleView setFillIndicator(boolean fillIndicator) {
         isFillIndicator = fillIndicator;
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 设置指示器相对位置
+     * 对应属性 bubbleIndicatorLocation
      *
      * @param location 枚举值，可以是起始位置，中间位置，结束位置，按从左到右，从上到下算
      *                 默认中间位置
      */
-    public void setIndicatorLocation(IndicatorLocation location) {
+    public BubbleView setIndicatorLocation(IndicatorLocation location) {
         mBubbleIndicatorLocationType = 16;
         location_e = location.getIndex();
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 设置指示器相对位置
+     * 对应属性 bubbleIndicatorLocation
      *
      * @param location 范围0-1f，0.5是中间，默认0.5
      */
-    public void setIndicatorLocation(float location) {
+    public BubbleView setIndicatorLocation(float location) {
         if (location < 0) location = 0;
         else if (location > 1) location = 1;
 
@@ -592,51 +644,211 @@ public class BubbleView extends ViewGroup {
         location_f = location;
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 设置指示器相对位置
+     * 对应属性 bubbleIndicatorLocation
      *
      * @param location 0:中间，正数：从开始位置向中间偏移，负数：从结束位置中间偏移
      *                 单位：pd
      */
-    public void setIndicatorLocation(int location) {
+    public BubbleView setIndicatorLocation(int location) {
         mBubbleIndicatorLocationType = TypedValue.TYPE_DIMENSION;
         location_d = dp2px(location);
         setPath();
         requestLayout();
+        return this;
     }
 
     /**
      * 绘制指示器形状
+     * 默认使用三角形指示器
      *
      * @param drawIndicator
      */
-    public void setDrawIndicator(DrawIndicator drawIndicator) {
+    public BubbleView setDrawIndicator(DrawIndicator drawIndicator) {
         mDrawIndicator = drawIndicator;
         setPath();
         requestLayout();
+        return this;
     }
 
-    public void setMaxWhidt(int maxWhidt) {
-        mMaxWhidt = maxWhidt;
+    /**
+     * @param maxWhidt 单位 ：dp
+     * @return
+     */
+    public BubbleView setMaxWhidt(int maxWhidt) {
+        mMaxWhidt = dp2px(maxWhidt);
         requestLayout();
+        return this;
     }
 
-    public void setMaxHeight(int maxHeight) {
-        mMaxHeight = maxHeight;
+    /**
+     * @param maxHeight 单位 ：dp
+     * @return
+     */
+    public BubbleView setMaxHeight(int maxHeight) {
+        mMaxHeight = dp2px(maxHeight);
         requestLayout();
+        return this;
     }
 
-    public void setMinWhidt(int minWhidt) {
-        mMinWhidt = minWhidt;
+    /**
+     * @param minWhidt 单位 ：dp
+     * @return
+     */
+    public BubbleView setMinWhidt(int minWhidt) {
+        mMinWhidt = dp2px(minWhidt);
         requestLayout();
+        return this;
     }
 
-    public void setMinHeight(int minHeight) {
-        mMinHeight = minHeight;
+    /**
+     * @param minHeight 单位 ：dp
+     * @return
+     */
+    public BubbleView setMinHeight(int minHeight) {
+        mMinHeight = dp2px(minHeight);
         requestLayout();
+        return this;
     }
+
+    /**
+     * 设置线条宽度，如果没有宽度，则填充气泡
+     * 对应属性 bubbleStrokeWidth
+     *
+     * @param strokeWidth 单位 dp
+     */
+    public BubbleView setStrokeWidth(int strokeWidth) {
+        mStrokeWidth = dp2px(strokeWidth);
+        if (mStrokeWidth > 0) {
+            mPaint.setStyle(Paint.Style.STROKE);
+            mPaint.setStrokeWidth(mStrokeWidth);
+        } else {
+            mPaint.setStyle(Paint.Style.FILL);
+        }
+        requestLayout();
+        return this;
+    }
+
+    /**
+     * 获取阴影颜色
+     *
+     * @return
+     */
+    public int getShadowColor() {
+        return mShadowColor;
+    }
+
+    /**
+     * 获取气泡Z轴高度
+     *
+     * @return
+     */
+    public int getBubbleElevation() {
+        return mElevation;
+    }
+
+    /**
+     * 获取气泡颜色
+     *
+     * @return
+     */
+    public int getBubbleColor() {
+        return mBubbleColor;
+    }
+
+    /**
+     * 获取指示器高度
+     *
+     * @return
+     */
+    public int getIndicatorHeight() {
+        return mIndicatorHeight;
+    }
+
+    /**
+     * 获取指示器宽度
+     *
+     * @return
+     */
+    public int getIndicatorWidth() {
+        return mIndicatorWidth;
+    }
+
+    /**
+     * 获取圆角矩形圆角半径
+     *
+     * @return
+     */
+    public int getRadius() {
+        return mRadius;
+    }
+
+    /**
+     * 获取边框线宽度
+     *
+     * @return
+     */
+    public int getStrokeWidth() {
+        return mStrokeWidth;
+    }
+
+    /**
+     * 获取指示器方向
+     *
+     * @return
+     */
+    public IndicatorDirection getIndicatorDirection() {
+        return mIndicatorDirection;
+    }
+
+    /**
+     * 内容是否填充指示器
+     *
+     * @return
+     */
+    public boolean isFillIndicator() {
+        return isFillIndicator;
+    }
+
+    /**
+     * 获取指示器，获取出来没什么卵用
+     *
+     * @param <I>
+     * @return
+     */
+    public <I extends DrawIndicator> I getDrawIndicator() {
+        return (I) mDrawIndicator;
+    }
+
+    /**
+     * 获取指示器位置大小
+     *
+     * @return
+     */
+    public Rect getIndicatorRect() {
+        return mIndicatorRect;
+    }
+
+    public int getMaxWhidt() {
+        return mMaxWhidt;
+    }
+
+    public int getMaxHeight() {
+        return mMaxHeight;
+    }
+
+    public int getMinWhidt() {
+        return mMinWhidt;
+    }
+
+    public int getMinHeight() {
+        return mMinHeight;
+    }
+
     /****************辅助类*******************/
     /**
      * 指示器方向

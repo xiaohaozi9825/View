@@ -69,10 +69,13 @@
             <enum name="end" value="2" />
         </attr>
 
-        //2020-6-2 09:19:15 新增
+        //2020-6-2 09:19:15 v3 新增
         <attr name="bubbleMaxWidth" format="dimension" />
         <attr name="bubbleMaxHeight" format="dimension" />
         <attr name="bubbleMinWidth" format="dimension" />
         <attr name="bubbleMinHeight" format="dimension" />
+
+        //2020-6-24 17:19:35 v4 新增，线条宽度
+        <attr name="bubbleStrokeWidth" format="dimension" />
     </declare-styleable>
 </resources>

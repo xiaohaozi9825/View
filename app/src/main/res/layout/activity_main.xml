@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#2888">
 
 
     <LinearLayout
@@ -93,15 +94,17 @@
         </pw.xiaohaozi.view.BubbleView>
 
         <pw.xiaohaozi.view.BubbleView
+            android:id="@+id/my_bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:bubbleElevation="8dp"
-            app:bubbleFillIndicator="false"
+            app:bubbleFillIndicator="true"
             app:bubbleIndicatorDirection="left"
             app:bubbleIndicatorHeight="8dp"
             app:bubbleIndicatorLocation="start"
-            app:bubbleIndicatorWidth="8dp"
-            app:bubbleShadowColor="#00ff00">
+            app:bubbleIndicatorWidth="16dp"
+            app:bubbleShadowColor="#00ff00"
+            app:bubbleStrokeWidth="1dp">
 
 
             <!--        <ImageView-->
@@ -115,12 +118,14 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="
+        自定义指示器\n
         app:bubbleElevation=&quot;8dp&quot;\n
         app:bubbleShadowColor=&quot;#00ff00&quot;\n
         app:bubbleFillIndicator=&quot;false&quot;\n
         app:bubbleIndicatorHeight=&quot;8dp&quot;\n
         app:bubbleIndicatorWidth=&quot;8dp&quot;\n
         app:bubbleIndicatorDirection=&quot;left&quot;\n
+        app:bubbleStrokeWidth=&quot;1dp&quot;\n
         app:bubbleIndicatorLocation=&quot;start&quot;" />
 
         </pw.xiaohaozi.view.BubbleView>
@@ -162,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:gravity="right"
+                android:gravity="center"
                 android:text="
         app:bubbleElevation=&quot;8dp&quot;\n
         app:bubbleIndicatorDirection=&quot;top&quot;" />
