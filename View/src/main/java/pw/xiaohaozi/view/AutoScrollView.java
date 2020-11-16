@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Size;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -14,8 +13,8 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import pw.xiaohaozi.view.R;
+
+import pw.xiaohaozi.view.utils.Size;
 
 /**
  * 自动滚动视图
@@ -27,7 +26,7 @@ import pw.xiaohaozi.view.R;
  * 使用注意事项：
  * 1、如果想要子视图尺寸发生变化，则重新滚动，则需要将子控件的宽高设置成包裹内容
  */
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
 public class AutoScrollView extends FrameLayout {
     /**
      * 慢速滚动
@@ -62,15 +61,7 @@ public class AutoScrollView extends FrameLayout {
     }
 
     public AutoScrollView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
-    }
-
-    /**
-     * 方法二
-     * 虽然繁琐，但可以有效解决方法一中的bug
-     */
-    public AutoScrollView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        super(context, attrs, defStyleAttr);
         if (attrs != null) {
             //1、获取 TypedArray
             //AutoScrollView 为attrs中declare-styleable的name值
@@ -91,6 +82,35 @@ public class AutoScrollView extends FrameLayout {
         }
         init();
     }
+
+    /**
+     * 方法二
+     * 虽然繁琐，但可以有效解决方法一中的bug
+     */
+//    public AutoScrollView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            super(context, attrs, defStyleAttr, defStyleRes);
+//        }
+//        if (attrs != null) {
+//            //1、获取 TypedArray
+//            //AutoScrollView 为attrs中declare-styleable的name值
+//            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AutoScrollView);
+//
+//            //2、获取属性，enum用getInt();返回值是定义enum中的value
+//            //滚动速度
+//            mVelocity = typedArray.getInt(R.styleable.AutoScrollView_autoScrollVelocity, VELOCITY_HOROTELIC_RATE);
+//            //滚动方向：水平、垂直
+//            int autoScrollDirection = typedArray.getInt(R.styleable.AutoScrollView_autoScrollDirection, 1);
+//            mDirection = autoScrollDirection == 1 ? Direction.HORIZONTAL : Direction.VERTICAL;
+//            //属性：超出滚动、永久滚动
+//            int autoScrollAttribute = typedArray.getInt(R.styleable.AutoScrollView_autoScrollAttribute, 1);
+//            mAttribute = autoScrollAttribute == 1 ? Attribute.EXCEED : Attribute.ALWAYS;
+//
+//            //3、回收typedArray，提高性能
+//            typedArray.recycle();
+//        }
+//        init();
+//    }
 
     private void init() {
     }

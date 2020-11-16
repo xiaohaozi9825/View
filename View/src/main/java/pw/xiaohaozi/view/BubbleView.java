@@ -433,6 +433,7 @@ public class BubbleView extends ViewGroup {
      * 指示器在左边
      */
 
+
     private void bubbleLeft() {
 
         mPath.addRoundRect(mIndicatorHeight + mElevation / 2, (int) (mElevation * .2f + .5f), w - mElevation / 2,

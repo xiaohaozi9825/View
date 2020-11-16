@@ -8,12 +8,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import pw.xiaohaozi.view.R;
 
 
@@ -49,13 +51,24 @@ public class LoginView extends TextView {
     }
 
     public LoginView(Context context, AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
+        mBorderWidth = dp2px(4);
+        if (attrs != null) {
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoginView);
+
+            mBorderColor = typedArray.getColor(R.styleable.LoginView_loginBorderColor, mBorderColor);
+            mBorderWidth = typedArray.getDimension(R.styleable.LoginView_loginBorderWidth, mBorderWidth);
+
+            mContentColor = typedArray.getColor(R.styleable.LoginView_loginContentColor, mContentColor);
+            typedArray.recycle();
+        }
+        init();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public LoginView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mBorderWidth = dp2px(4);
-
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoginView);
 

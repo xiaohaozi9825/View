@@ -153,19 +153,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
-            app:bubbleElevation="8dp"
-            app:bubbleIndicatorDirection="top"
-            app:bubbleShadowColor="#00ffff">
-
+            android:layout_margin="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="
-app:bubbleElevation=&quot;8dp&quot;\n
-app:bubbleIndicatorDirection=&quot;top&quot;" />
+                android:textSize="24sp"
+                android:textColor="@android:color/black"
+                android:text="BubbleView控件使用" />
 
         </pw.xiaohaozi.view.BubbleView>
 
