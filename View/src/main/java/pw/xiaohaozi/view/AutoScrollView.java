@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -28,6 +29,7 @@ import pw.xiaohaozi.view.utils.Size;
  */
 
 public class AutoScrollView extends FrameLayout {
+    private static final String TAG = "AutoScrollView";
     /**
      * 慢速滚动
      */
@@ -160,10 +162,11 @@ public class AutoScrollView extends FrameLayout {
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, heightMode);
         setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
         mChildSize = new Size(child.getMeasuredWidth(), child.getMeasuredHeight());
-        if (mChildOldSize.getWidth() != mChildSize.getWidth()
-                || mChildOldSize.getHeight() != mChildSize.getHeight()) {
-            if (mWidth > 0 && mHeight > 0) reStart();
-        }
+//        if (mChildOldSize.getWidth() != mChildSize.getWidth()
+//                || mChildOldSize.getHeight() != mChildSize.getHeight()) {
+//            if (mWidth > 0 && mHeight > 0) reStart();
+//        }
+        if (mWidth > 0 && mHeight > 0) reStart();
         mChildOldSize = new Size(child.getMeasuredWidth(), child.getMeasuredHeight());
     }
 
@@ -184,6 +187,7 @@ public class AutoScrollView extends FrameLayout {
     }
 
     private void start() {
+        Log.i(TAG, "start: ");
         if (getChildCount() < 1) return;
         final View child = getChildAt(0);
         int s;//位移（单位：像素）
@@ -233,6 +237,7 @@ public class AutoScrollView extends FrameLayout {
     }
 
     private void stop() {
+        Log.i(TAG, "stop: ");
         if (getChildCount() < 1) return;
         final View child = getChildAt(0);
         if (mTranslateAnimation != null) {

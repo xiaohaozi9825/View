@@ -9,27 +9,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
+            android:layout_height="match_parent"
             app:cardCornerRadius="32dp">
 
             <pw.xiaohaozi.view.AutoScrollView
                 android:id="@+id/asv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                app:autoScrollVelocity="fast">
+                android:layout_width="wrap_content"
+                android:layout_height="400dp"
+                app:autoScrollDirection="vertical"
+                app:autoScrollVelocity="20">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="64dp"
@@ -38,13 +38,13 @@
 
                     <TextView
                         android:id="@+id/tv_gun"
-                        android:layout_width="wrap_content"
+                        android:layout_width="72dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:elevation="-1dp"
                         android:padding="8dp"
                         android:text="天王盖地虎，小鸡炖蘑菇，蘑菇炖不烂，还得加大蒜，宝塔镇河妖，河妖镇不住"
-                        android:textSize="18sp"
+                        android:textSize="24sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -68,123 +68,6 @@
             app:loginBorderWidth="6dp"
             app:loginContentColor="#0f0" />
 
-        <pw.xiaohaozi.view.BubbleView
 
-            android:id="@+id/bv_guanji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:bubbleColor="@color/colorAccent"
-            app:bubbleElevation="8dp"
-            app:bubbleFillIndicator="true"
-            app:bubbleIndicatorDirection="left"
-            app:bubbleIndicatorLocation="start"
-
-            app:bubbleRadius="8dp"
-            app:bubbleShadowColor="#00ff00">
-
-
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="200dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/timg" />
-
-
-        </pw.xiaohaozi.view.BubbleView>
-
-        <pw.xiaohaozi.view.BubbleView
-            android:id="@+id/my_bubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:bubbleElevation="8dp"
-            app:bubbleFillIndicator="true"
-            app:bubbleIndicatorDirection="left"
-            app:bubbleIndicatorHeight="8dp"
-            app:bubbleIndicatorLocation="start"
-            app:bubbleIndicatorWidth="16dp"
-            app:bubbleShadowColor="#00ff00"
-            app:bubbleStrokeWidth="1dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:padding="8dp"
-                android:text="
-        自定义指示器\n
-        app:bubbleElevation=&quot;8dp&quot;\n
-        app:bubbleShadowColor=&quot;#00ff00&quot;\n
-        app:bubbleFillIndicator=&quot;false&quot;\n
-        app:bubbleIndicatorHeight=&quot;8dp&quot;\n
-        app:bubbleIndicatorWidth=&quot;8dp&quot;\n
-        app:bubbleIndicatorDirection=&quot;left&quot;\n
-        app:bubbleStrokeWidth=&quot;1dp&quot;\n
-        app:bubbleIndicatorLocation=&quot;start&quot;" />
-        </pw.xiaohaozi.view.BubbleView>
-
-        <pw.xiaohaozi.view.BubbleView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            app:bubbleElevation="8dp"
-            app:bubbleFillIndicator="false"
-            app:bubbleIndicatorDirection="right"
-            app:bubbleIndicatorLocation="0.1"
-            app:bubbleShadowColor="#00ffff">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-
-                android:padding="8dp"
-                android:text="
-        app:bubbleShadowColor=&quot;#00ffff&quot;\n
-        app:bubbleElevation=&quot;8dp&quot;\n
-        app:bubbleFillIndicator=&quot;false&quot;\n
-        app:bubbleIndicatorDirection=&quot;right&quot;\n
-        app:bubbleIndicatorLocation=&quot;0.1&quot;" />
-
-        </pw.xiaohaozi.view.BubbleView>
-
-        <pw.xiaohaozi.view.BubbleView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="24sp"
-                android:textColor="@android:color/black"
-                android:text="BubbleView控件使用" />
-
-        </pw.xiaohaozi.view.BubbleView>
-
-        <pw.xiaohaozi.view.BubbleView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            app:bubbleElevation="8dp"
-            app:bubbleIndicatorDirection="bottom"
-            app:bubbleShadowColor="#00ffff">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-
-                android:gravity="left"
-                android:text="
-app:bubbleElevation=&quot;8dp&quot;\n
-app:bubbleIndicatorDirection=&quot;bottom&quot;" />
-
-        </pw.xiaohaozi.view.BubbleView>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
