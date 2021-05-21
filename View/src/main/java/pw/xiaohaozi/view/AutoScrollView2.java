@@ -58,6 +58,7 @@ public class AutoScrollView2 extends LinearLayout {
     private ScrollCallBack mScrollCallBack;
     private boolean isScroll = false;
     private boolean isAutoScroll = true;
+    private int delayScroll = -1;
 
     public AutoScrollView2(@NonNull Context context) {
         this(context, null);
@@ -88,6 +89,7 @@ public class AutoScrollView2 extends LinearLayout {
             typedArray.recycle();
             TypedArray typedArray2 = context.obtainStyledAttributes(attrs, R.styleable.AutoScrollView2);
             isAutoScroll = typedArray2.getBoolean(R.styleable.AutoScrollView2_isAutoScroll, isAutoScroll);
+            delayScroll = typedArray2.getInteger(R.styleable.AutoScrollView2_delayScroll, delayScroll);
             typedArray2.recycle();
         }
 
@@ -130,6 +132,7 @@ public class AutoScrollView2 extends LinearLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         stop();
+        if (getChildAt(1).getVisibility() != INVISIBLE) getChildAt(1).setVisibility(INVISIBLE);
         // MeasureSpec.AT_MOST; 至多模式, 控件有多大显示多大, wrap_content
         // MeasureSpec.EXACTLY; 确定模式, 类似宽高写死成dip, match_parent
         // MeasureSpec.UNSPECIFIED; 未指定模式.
@@ -202,7 +205,11 @@ public class AutoScrollView2 extends LinearLayout {
         ImageView imageView = (ImageView) getChildAt(1);
         Bitmap toBitmap = toBitmap(child);
         if (toBitmap != null) imageView.setImageBitmap(toBitmap);
-        reStart();
+        if (delayScroll > 0) {
+            postDelayed(this::reStart, delayScroll);
+        }else {
+            reStart();
+        }
     }
 
     @Override
@@ -236,10 +243,8 @@ public class AutoScrollView2 extends LinearLayout {
         int childMeasuredHeight = child.getMeasuredHeight();
 
         if (mDirection == Direction.HORIZONTAL) {
-            if (mAttribute == Attribute.EXCEED && childMeasuredWidth <= mWidth) {
-                if (imageView.getVisibility() != GONE) imageView.setVisibility(GONE);
-                return;
-            }
+            if (mAttribute == Attribute.EXCEED && childMeasuredWidth <= mWidth) return;
+
             s = childMeasuredWidth + mWidth;
             //fromXDelta     起始点X轴坐标，可以是数值、百分数、百分数p 三种样式，同scale
             //fromYDelta    起始点Y轴从标，可以是数值、百分数、百分数p 三种样式
@@ -248,10 +253,8 @@ public class AutoScrollView2 extends LinearLayout {
             mTranslateAnimation = new TranslateAnimation(0, -childMeasuredWidth, 0, 0);
 //            mTranslateAnimation1 = new TranslateAnimation(mWidth, -childMeasuredWidth, 0, 0);
         } else {
-            if (mAttribute == Attribute.EXCEED && childMeasuredHeight <= mHeight) {
-                if (imageView.getVisibility() != GONE) imageView.setVisibility(GONE);
-                return;
-            }
+            if (mAttribute == Attribute.EXCEED && childMeasuredHeight <= mHeight) return;
+
             s = childMeasuredHeight + mHeight;
             mTranslateAnimation = new TranslateAnimation(0, 0, 0, -childMeasuredHeight);
 //            mTranslateAnimation = new TranslateAnimation(0, 0, mHeight, -childMeasuredHeight);
@@ -361,6 +364,14 @@ public class AutoScrollView2 extends LinearLayout {
 
     public void setAutoScroll(boolean autoScroll) {
         isAutoScroll = autoScroll;
+    }
+
+    public int getDelayScroll() {
+        return delayScroll;
+    }
+
+    public void setDelayScroll(int delayScroll) {
+        this.delayScroll = delayScroll;
     }
 
     /**************************************************/

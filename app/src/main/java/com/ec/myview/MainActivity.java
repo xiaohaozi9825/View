@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
       tv_gun.setText("布局定义了界面的视觉结构，如 Activity 或应用微件的界面。您可通过两种方式声明布局：Android 框架让您可以灵活地使用这两种或其中一种方");
-        tv_gun.postDelayed(() -> asv.start(),5000);
+//        tv_gun.postDelayed(() -> asv.start(),5000);
 //        tv_gun.postDelayed(() -> {
 //            tv_gun.setText("你好，现在尺寸发生了改变了");
 //
