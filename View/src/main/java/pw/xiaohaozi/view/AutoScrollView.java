@@ -116,14 +116,14 @@ public class AutoScrollView extends FrameLayout {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        Log.i(TAG, "onLayout: ");
+//        Log.i(TAG, "onLayout: ");
         super.onLayout(changed, left, top, right, bottom);
         start();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Log.i(TAG, "onMeasure: ");
+//        Log.i(TAG, "onMeasure: ");
         stop();
         // MeasureSpec.AT_MOST; 至多模式, 控件有多大显示多大, wrap_content
         // MeasureSpec.EXACTLY; 确定模式, 类似宽高写死成dip, match_parent
@@ -192,7 +192,7 @@ public class AutoScrollView extends FrameLayout {
     }
 
     private void start() {
-        Log.i(TAG, "start: ");
+//        Log.i(TAG, "start: ");
         if (getChildCount() < 1) return;
         final View child = getChildAt(0);
         int s;//位移（单位：像素）
@@ -242,7 +242,7 @@ public class AutoScrollView extends FrameLayout {
     }
 
     private void stop() {
-        Log.i(TAG, "stop: ");
+//        Log.i(TAG, "stop: ");
         if (getChildCount() < 1) return;
         final View child = getChildAt(0);
         if (mTranslateAnimation != null) {

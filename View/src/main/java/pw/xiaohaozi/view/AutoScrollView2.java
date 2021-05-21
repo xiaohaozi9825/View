@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -58,6 +57,7 @@ public class AutoScrollView2 extends LinearLayout {
     private Size mChildOldSize = new Size(-1, -1);
     private ScrollCallBack mScrollCallBack;
     private boolean isScroll = false;
+    private boolean isAutoScroll = true;
 
     public AutoScrollView2(@NonNull Context context) {
         this(context, null);
@@ -86,7 +86,11 @@ public class AutoScrollView2 extends LinearLayout {
 
             //3、回收typedArray，提高性能
             typedArray.recycle();
+            TypedArray typedArray2 = context.obtainStyledAttributes(attrs, R.styleable.AutoScrollView2);
+            isAutoScroll = typedArray2.getBoolean(R.styleable.AutoScrollView2_isAutoScroll, isAutoScroll);
+            typedArray2.recycle();
         }
+
         init();
     }
 
@@ -191,7 +195,7 @@ public class AutoScrollView2 extends LinearLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        Log.i(TAG, "onLayout: " + changed);
+//        Log.i(TAG, "onLayout: " + changed);
 
         View child = getChildAt(0);
 
@@ -220,8 +224,8 @@ public class AutoScrollView2 extends LinearLayout {
         return bitmap;
     }
 
-    private void start() {
-        Log.i(TAG, "start: ");
+    public void start() {
+//        Log.i(TAG, "start: ");
         if (getChildCount() < 1) return;
         final View child = getChildAt(0);
         final ImageView imageView = (ImageView) getChildAt(1);
@@ -283,8 +287,8 @@ public class AutoScrollView2 extends LinearLayout {
         if (imageView.getVisibility() != VISIBLE) imageView.setVisibility(VISIBLE);
     }
 
-    private void stop() {
-        Log.i(TAG, "stop: ");
+    public void stop() {
+//        Log.i(TAG, "stop: ");
         if (getChildCount() < 1) return;
 
         if (mTranslateAnimation != null) {
@@ -295,9 +299,9 @@ public class AutoScrollView2 extends LinearLayout {
         }
     }
 
-    private void reStart() {
+    public void reStart() {
         stop();
-        start();
+        if (isAutoScroll) start();
     }
 
 
@@ -351,6 +355,13 @@ public class AutoScrollView2 extends LinearLayout {
         return isScroll;
     }
 
+    public boolean isAutoScroll() {
+        return isAutoScroll;
+    }
+
+    public void setAutoScroll(boolean autoScroll) {
+        isAutoScroll = autoScroll;
+    }
 
     /**************************************************/
 //    @Override

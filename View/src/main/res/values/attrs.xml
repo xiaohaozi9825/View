@@ -21,6 +21,12 @@
         </attr>
 
     </declare-styleable>
+    <declare-styleable name="AutoScrollView2">
+        <!--是否自动滚动-->
+        <attr name="isAutoScroll" format="boolean" />
+
+
+    </declare-styleable>
     <declare-styleable name="LoginView">
         <!--        边框颜色-->
         <attr name="loginBorderColor" format="color" />
