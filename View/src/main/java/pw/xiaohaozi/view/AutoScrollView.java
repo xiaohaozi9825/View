@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 
@@ -216,7 +217,7 @@ public class AutoScrollView extends FrameLayout {
 
         int t = s / mVelocity;//时间 （单位：毫秒）
         mTranslateAnimation.setDuration(t * 1000);
-
+        mTranslateAnimation.setInterpolator(new LinearInterpolator());
         //重复次数
         mTranslateAnimation.setRepeatCount(-1);
         mTranslateAnimation.setAnimationListener(new Animation.AnimationListener() {
