@@ -4,13 +4,13 @@ group = 'com.github.xiaohaozi9825'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.7"
+        versionCode 8
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
