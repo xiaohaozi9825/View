@@ -18,18 +18,18 @@
             android:layout_height="match_parent"
             app:cardCornerRadius="32dp">
 
-            <pw.xiaohaozi.view.AutoScrollView
+            <pw.xiaohaozi.view.AutoScrollView2
                 android:id="@+id/asv"
                 android:layout_width="wrap_content"
                 android:layout_height="400dp"
-                app:autoScrollDirection="vertical"
-                app:autoScrollVelocity="20">
+                app:autoScrollDirection="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
+                    android:padding="16dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="64dp"
@@ -38,7 +38,7 @@
 
                     <TextView
                         android:id="@+id/tv_gun"
-                        android:layout_width="72dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:elevation="-1dp"
@@ -52,7 +52,7 @@
                 </LinearLayout>
 
 
-            </pw.xiaohaozi.view.AutoScrollView>
+            </pw.xiaohaozi.view.AutoScrollView2>
         </androidx.cardview.widget.CardView>
 
         <pw.xiaohaozi.view.LoginView
