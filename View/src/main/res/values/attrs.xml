@@ -22,9 +22,9 @@
 
     </declare-styleable>
     <declare-styleable name="AutoScrollView2">
-        <!--是否自动滚动-->
+        <!--是否自动滚动,如果不自动滚动，则需要手动调用start()方法-->
         <attr name="isAutoScroll" format="boolean" />
-        <!--        延时滚动-->
+        <!--延时滚动，延时多少秒开始滚动-->
         <attr name="delayScroll" format="integer" />
 
 

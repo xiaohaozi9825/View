@@ -5,7 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -13,6 +15,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,6 +59,7 @@ public class AutoScrollView2 extends LinearLayout {
     private Size mChildSize;
     private Size mChildOldSize = new Size(-1, -1);
     private ScrollCallBack mScrollCallBack;
+    private CountDownTimer mCountDownTimer;
     private boolean isScroll = false;
     private boolean isAutoScroll = true;
     private int delayScroll = -1;
@@ -205,11 +209,8 @@ public class AutoScrollView2 extends LinearLayout {
         ImageView imageView = (ImageView) getChildAt(1);
         Bitmap toBitmap = toBitmap(child);
         if (toBitmap != null) imageView.setImageBitmap(toBitmap);
-        if (delayScroll > 0) {
-            postDelayed(this::reStart, delayScroll);
-        }else {
-            reStart();
-        }
+        if (mCountDownTimer != null) mCountDownTimer.cancel();
+        mCountDownTimer = startTimer(delayScroll > 0 ? delayScroll * 1_000 : 500);
     }
 
     @Override
@@ -231,6 +232,9 @@ public class AutoScrollView2 extends LinearLayout {
         return bitmap;
     }
 
+    /**
+     * 开始滚动
+     */
     public void start() {
 //        Log.i(TAG, "start: ");
         if (getChildCount() < 1) return;
@@ -290,6 +294,9 @@ public class AutoScrollView2 extends LinearLayout {
         if (imageView.getVisibility() != VISIBLE) imageView.setVisibility(VISIBLE);
     }
 
+    /**
+     * 停止滚动
+     */
     public void stop() {
 //        Log.i(TAG, "stop: ");
         if (getChildCount() < 1) return;
@@ -302,11 +309,31 @@ public class AutoScrollView2 extends LinearLayout {
         }
     }
 
+    /**
+     * 重新开始滚动给
+     */
     public void reStart() {
         stop();
-        if (isAutoScroll) start();
+        start();
     }
 
+    //毫秒
+    private CountDownTimer startTimer(int millisecond) {
+
+        CountDownTimer done = new CountDownTimer(millisecond, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+            @Override
+            public void onFinish() {
+                stop();
+                if (isAutoScroll) AutoScrollView2.this.start();
+            }
+        };
+        done.start();
+        return done;
+    }
 
     /**
      * 设置滚动回调函数
@@ -358,18 +385,34 @@ public class AutoScrollView2 extends LinearLayout {
         return isScroll;
     }
 
+    /**
+     * 是否可以自动滚动
+     * @return
+     */
     public boolean isAutoScroll() {
         return isAutoScroll;
     }
 
+    /**
+     * 设置是否可以自动滚动
+     * @param autoScroll
+     */
     public void setAutoScroll(boolean autoScroll) {
         isAutoScroll = autoScroll;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDelayScroll() {
         return delayScroll;
     }
 
+    /**
+     * 延时多少秒后开始滚动
+     * @param delayScroll 单位： 秒
+     */
     public void setDelayScroll(int delayScroll) {
         this.delayScroll = delayScroll;
     }
