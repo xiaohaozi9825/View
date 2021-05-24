@@ -221,6 +221,12 @@ public class AutoScrollView2 extends LinearLayout {
 //        start();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mCountDownTimer != null) mCountDownTimer.cancel();
+    }
+
     private Bitmap toBitmap(View v) {
         int width = v.getWidth();
         int height = v.getHeight();
