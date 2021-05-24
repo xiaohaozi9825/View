@@ -236,6 +236,7 @@ public class AutoScrollView2 extends LinearLayout {
      * 开始滚动
      */
     public void start() {
+        TranslateAnimation imageAnimation;
 //        Log.i(TAG, "start: ");
         if (getChildCount() < 1) return;
         final View child = getChildAt(0);
@@ -255,42 +256,52 @@ public class AutoScrollView2 extends LinearLayout {
             //toXDelta         结束点X轴坐标
             //toYDelta        结束点Y轴坐标
             mTranslateAnimation = new TranslateAnimation(0, -childMeasuredWidth, 0, 0);
+            imageAnimation = new TranslateAnimation(0, -childMeasuredWidth, 0, 0);
 //            mTranslateAnimation1 = new TranslateAnimation(mWidth, -childMeasuredWidth, 0, 0);
         } else {
             if (mAttribute == Attribute.EXCEED && childMeasuredHeight <= mHeight) return;
 
             s = childMeasuredHeight + mHeight;
             mTranslateAnimation = new TranslateAnimation(0, 0, 0, -childMeasuredHeight);
+            imageAnimation = new TranslateAnimation(0, 0, 0, -childMeasuredHeight);
 //            mTranslateAnimation = new TranslateAnimation(0, 0, mHeight, -childMeasuredHeight);
         }
 
         int t = s / mVelocity;//时间 （单位：毫秒）
         mTranslateAnimation.setDuration(t * 1000);
+        imageAnimation.setDuration(t * 1000);
+
         mTranslateAnimation.setInterpolator(new LinearInterpolator());
+        imageAnimation.setInterpolator(new LinearInterpolator());
         //重复次数
         mTranslateAnimation.setRepeatCount(-1);
+        imageAnimation.setRepeatCount(-1);
+
         mTranslateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 if (mScrollCallBack != null) mScrollCallBack.onStart(child);
                 isScroll = true;
+                imageView.startAnimation(imageAnimation);
+
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
                 if (mScrollCallBack != null) mScrollCallBack.onEnd(child);
                 isScroll = false;
+                imageView.clearAnimation();
+
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
                 if (mScrollCallBack != null) mScrollCallBack.onRepeat(child);
+
             }
         });
 
         child.startAnimation(mTranslateAnimation);
-        imageView.startAnimation(mTranslateAnimation);
         if (imageView.getVisibility() != VISIBLE) imageView.setVisibility(VISIBLE);
     }
 
@@ -387,6 +398,7 @@ public class AutoScrollView2 extends LinearLayout {
 
     /**
      * 是否可以自动滚动
+     *
      * @return
      */
     public boolean isAutoScroll() {
@@ -395,6 +407,7 @@ public class AutoScrollView2 extends LinearLayout {
 
     /**
      * 设置是否可以自动滚动
+     *
      * @param autoScroll
      */
     public void setAutoScroll(boolean autoScroll) {
@@ -402,7 +415,6 @@ public class AutoScrollView2 extends LinearLayout {
     }
 
     /**
-     *
      * @return
      */
     public int getDelayScroll() {
@@ -411,6 +423,7 @@ public class AutoScrollView2 extends LinearLayout {
 
     /**
      * 延时多少秒后开始滚动
+     *
      * @param delayScroll 单位： 秒
      */
     public void setDelayScroll(int delayScroll) {
