@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 1_12
-        versionName "1.12"
+        versionCode 1_13
+        versionName "1.13"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -22,7 +22,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {

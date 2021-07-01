@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -136,7 +137,8 @@ public class AutoScrollView2 extends LinearLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         stop();
-        if (getChildAt(1).getVisibility() != INVISIBLE) getChildAt(1).setVisibility(INVISIBLE);
+        View cloneView = getChildAt(1);
+        if (cloneView.getVisibility() != INVISIBLE) cloneView.setVisibility(INVISIBLE);
         // MeasureSpec.AT_MOST; 至多模式, 控件有多大显示多大, wrap_content
         // MeasureSpec.EXACTLY; 确定模式, 类似宽高写死成dip, match_parent
         // MeasureSpec.UNSPECIFIED; 未指定模式.
@@ -167,7 +169,8 @@ public class AutoScrollView2 extends LinearLayout {
             childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.UNSPECIFIED);
         }
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec);//测量某一个子控件，以上三个方法都调用了该方法
-        getChildAt(1).measure(childWidthMeasureSpec, childHeightMeasureSpec);
+        cloneView.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+
 
         //本控件尺寸测量
         if (heightMode == MeasureSpec.AT_MOST) {
@@ -206,9 +209,9 @@ public class AutoScrollView2 extends LinearLayout {
 
         View child = getChildAt(0);
 
-        ImageView imageView = (ImageView) getChildAt(1);
+        ImageView cloneView = (ImageView) getChildAt(1);
         Bitmap toBitmap = toBitmap(child);
-        if (toBitmap != null) imageView.setImageBitmap(toBitmap);
+        if (toBitmap != null) cloneView.setImageBitmap(toBitmap);
         if (mCountDownTimer != null) mCountDownTimer.cancel();
         mCountDownTimer = startTimer(delayScroll > 0 ? delayScroll * 1_000 : 500);
     }
@@ -473,7 +476,15 @@ public class AutoScrollView2 extends LinearLayout {
 
         int childCount = getChildCount();
         if (childCount == 0) {
-            super.addView(child, 0, params);
+            if (child instanceof ViewGroup) {
+                super.addView(child, 0, params);
+            }else {
+                //在水平滚动的情况下，如果子控件不是容器，LineLayout的onLayout会报空指针异常，所以这里需要套一层容器，防止空指针
+                FrameLayout frameLayout = new FrameLayout(getContext());
+                frameLayout.addView(child);
+                super.addView(frameLayout, 0, params);
+            }
+
             ImageView imageView = new ImageView(getContext());
             super.addView(imageView, 1, params);
 //            addView(imageView);
